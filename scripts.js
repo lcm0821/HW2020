@@ -1,7 +1,7 @@
 
 let tasks = []; // {title: "dddddd", done: false}
 
-function readerEditor() {
+function renderEditor() {
     let inputEl = document.querySelector("#default-todo-panel .todo-editor > input");
 
     // inputEl.onchange = (e) => {
@@ -25,7 +25,7 @@ function readerEditor() {
 
         console.log("tasks: ", tasks);
 
-        readerTaskItems();
+        renderTaskItems();
     };
 
     inputEl.onkeypress = (e) => {
@@ -41,7 +41,7 @@ function readerEditor() {
     };
 }
 
-function readerTaskItems() {
+function renderTaskItems() {
     console.log("reader items");
     let itemsEl = document.querySelector("#default-todo-panel .todo-items");
 
@@ -94,14 +94,24 @@ function renderTaskCtrlBar(tasks, taskIdx) {
     }
     upEl.innerText = "↿";
     upEl.onclick = () => {
-        //
+        let t = tasks[taskIdx];
+        tasks[taskIdx] = tasks[taskIdx - 1];
+        tasks[taskIdx - 1] = t;
+        renderTaskItems();
     };
     ctrlbarEl.append(upEl);
 
     let downEl = document.createElement("button");
+    if (taskIdx === tasks.length-1) {
+        downEl.disabled = true;
+    }
+
     downEl.innerText = "⇂";
     downEl.onclick = () => {
-        //
+        let t = tasks[taskIdx];
+        tasks[taskIdx] = tasks[taskIdx + 1];
+        tasks[taskIdx + 1] = t;
+        renderTaskItems();
     };
     ctrlbarEl.append(downEl);
 
@@ -110,7 +120,7 @@ function renderTaskCtrlBar(tasks, taskIdx) {
     cancelEl.innerText = "X";
     cancelEl.onclick = () => {
         tasks.splice(taskIdx, 1);
-        readerTaskItems();
+        renderTaskItems();
     };
 
     ctrlbarEl.append(cancelEl);
@@ -118,5 +128,5 @@ function renderTaskCtrlBar(tasks, taskIdx) {
     return ctrlbarEl;
 }
 
-readerEditor();
-readerTaskItems();
+renderEditor();
+renderTaskItems();
